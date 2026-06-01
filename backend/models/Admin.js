@@ -12,9 +12,12 @@ const AdminSchema = new mongoose.Schema(
 );
 
 AdminSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
+  if (!this.isModified('password')) {
+    if (typeof next === 'function') return next();
+    return;
+  }
   this.password = await bcrypt.hash(this.password, 12);
-  next();
+  if (typeof next === 'function') next();
 });
 
 AdminSchema.methods.comparePassword = async function (candidatePassword) {
