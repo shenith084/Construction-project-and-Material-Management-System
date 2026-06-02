@@ -2,16 +2,6 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Project from '@/models/Project';
 
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-};
-
-export async function OPTIONS() {
-  return new NextResponse(null, { status: 200, headers: CORS_HEADERS });
-}
-
 // GET /api/projects - list all
 export async function GET(request) {
   try {
@@ -20,9 +10,9 @@ export async function GET(request) {
     const status = searchParams.get('status');
     const query = status ? { status } : {};
     const projects = await Project.find(query).sort({ createdAt: -1 });
-    return NextResponse.json({ projects }, { headers: CORS_HEADERS });
+    return NextResponse.json({ projects });
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch projects' }, { status: 500, headers: CORS_HEADERS });
+    return NextResponse.json({ error: 'Failed to fetch projects' }, { status: 500 });
   }
 }
 
@@ -32,9 +22,9 @@ export async function POST(request) {
     await connectDB();
     const body = await request.json();
     const project = await Project.create(body);
-    return NextResponse.json({ project, message: 'Project created successfully' }, { status: 201, headers: CORS_HEADERS });
+    return NextResponse.json({ project, message: 'Project created successfully' }, { status: 201 });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: error.message || 'Failed to create project' }, { status: 400, headers: CORS_HEADERS });
+    return NextResponse.json({ error: error.message || 'Failed to create project' }, { status: 400 });
   }
 }

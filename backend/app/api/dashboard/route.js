@@ -6,16 +6,6 @@ import Worker from '@/models/Worker';
 import Supplier from '@/models/Supplier';
 import Contact from '@/models/Contact';
 
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'GET, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-};
-
-export async function OPTIONS() {
-  return new NextResponse(null, { status: 200, headers: CORS_HEADERS });
-}
-
 export async function GET() {
   try {
     await connectDB();
@@ -67,9 +57,9 @@ export async function GET() {
       },
       recentProjects,
       projectsByStatus,
-    }, { headers: CORS_HEADERS });
+    });
   } catch (error) {
     console.error('Dashboard error:', error);
-    return NextResponse.json({ error: 'Failed to fetch dashboard data' }, { status: 500, headers: CORS_HEADERS });
+    return NextResponse.json({ error: 'Failed to fetch dashboard data' }, { status: 500 });
   }
 }

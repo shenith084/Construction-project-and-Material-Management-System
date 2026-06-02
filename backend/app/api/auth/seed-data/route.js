@@ -8,16 +8,6 @@ import Supplier from '@/models/Supplier';
 import Contact from '@/models/Contact';
 import Assignment from '@/models/Assignment';
 
-const CORS_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
-};
-
-export async function OPTIONS() {
-  return new NextResponse(null, { status: 200, headers: CORS_HEADERS });
-}
-
 // POST /api/auth/seed-data - seeds full demo data (safe to re-run)
 export async function POST() {
   try {
@@ -430,10 +420,10 @@ export async function POST() {
         contacts: await Contact.countDocuments(),
         assignments: await Assignment.countDocuments(),
       },
-    }, { headers: CORS_HEADERS });
+    });
 
   } catch (error) {
     console.error('Seed error:', error);
-    return NextResponse.json({ error: 'Seed failed: ' + error.message }, { status: 500, headers: CORS_HEADERS });
+    return NextResponse.json({ error: 'Seed failed: ' + error.message }, { status: 500 });
   }
 }
