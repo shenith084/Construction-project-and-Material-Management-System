@@ -15,22 +15,24 @@ export async function OPTIONS() {
 export async function PUT(request, { params }) {
   try {
     await connectDB();
+    const resolvedParams = await params;
     const body = await request.json();
-    const contact = await Contact.findByIdAndUpdate(params.id, body, { new: true });
-    if (!contact) return NextResponse.json({ error: 'Contact not found' }, { status: 404, headers: CORS_HEADERS });
-    return NextResponse.json({ contact, message: 'Contact updated successfully' }, { headers: CORS_HEADERS });
+    const contact = await Contact.findByIdAndUpdate(resolvedParams.id, body, { new: true });
+    if (!contact) return NextResponse.json({ error: 'Message not found' }, { status: 404, headers: CORS_HEADERS });
+    return NextResponse.json({ contact, message: 'Message updated' }, { headers: CORS_HEADERS });
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to update contact' }, { status: 500, headers: CORS_HEADERS });
+    return NextResponse.json({ error: 'Failed to update message' }, { status: 400, headers: CORS_HEADERS });
   }
 }
 
 export async function DELETE(request, { params }) {
   try {
     await connectDB();
-    const contact = await Contact.findByIdAndDelete(params.id);
-    if (!contact) return NextResponse.json({ error: 'Contact not found' }, { status: 404, headers: CORS_HEADERS });
-    return NextResponse.json({ message: 'Contact deleted successfully' }, { headers: CORS_HEADERS });
+    const resolvedParams = await params;
+    const contact = await Contact.findByIdAndDelete(resolvedParams.id);
+    if (!contact) return NextResponse.json({ error: 'Message not found' }, { status: 404, headers: CORS_HEADERS });
+    return NextResponse.json({ message: 'Message deleted' }, { headers: CORS_HEADERS });
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to delete contact' }, { status: 500, headers: CORS_HEADERS });
+    return NextResponse.json({ error: 'Failed to delete message' }, { status: 500, headers: CORS_HEADERS });
   }
 }

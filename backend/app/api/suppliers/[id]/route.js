@@ -15,7 +15,8 @@ export async function OPTIONS() {
 export async function GET(request, { params }) {
   try {
     await connectDB();
-    const supplier = await Supplier.findById(params.id);
+    const resolvedParams = await params;
+    const supplier = await Supplier.findById(resolvedParams.id);
     if (!supplier) return NextResponse.json({ error: 'Supplier not found' }, { status: 404, headers: CORS_HEADERS });
     return NextResponse.json({ supplier }, { headers: CORS_HEADERS });
   } catch (error) {
@@ -26,8 +27,9 @@ export async function GET(request, { params }) {
 export async function PUT(request, { params }) {
   try {
     await connectDB();
+    const resolvedParams = await params;
     const body = await request.json();
-    const supplier = await Supplier.findByIdAndUpdate(params.id, body, { new: true, runValidators: true });
+    const supplier = await Supplier.findByIdAndUpdate(resolvedParams.id, body, { new: true, runValidators: true });
     if (!supplier) return NextResponse.json({ error: 'Supplier not found' }, { status: 404, headers: CORS_HEADERS });
     return NextResponse.json({ supplier, message: 'Supplier updated successfully' }, { headers: CORS_HEADERS });
   } catch (error) {
@@ -38,7 +40,8 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
   try {
     await connectDB();
-    const supplier = await Supplier.findByIdAndDelete(params.id);
+    const resolvedParams = await params;
+    const supplier = await Supplier.findByIdAndDelete(resolvedParams.id);
     if (!supplier) return NextResponse.json({ error: 'Supplier not found' }, { status: 404, headers: CORS_HEADERS });
     return NextResponse.json({ message: 'Supplier deleted successfully' }, { headers: CORS_HEADERS });
   } catch (error) {

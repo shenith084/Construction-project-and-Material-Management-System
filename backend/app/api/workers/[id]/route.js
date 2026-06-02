@@ -15,7 +15,8 @@ export async function OPTIONS() {
 export async function GET(request, { params }) {
   try {
     await connectDB();
-    const worker = await Worker.findById(params.id).populate('assignedProject', 'title status location');
+    const resolvedParams = await params;
+    const worker = await Worker.findById(resolvedParams.id).populate('assignedProject', 'title');
     if (!worker) return NextResponse.json({ error: 'Worker not found' }, { status: 404, headers: CORS_HEADERS });
     return NextResponse.json({ worker }, { headers: CORS_HEADERS });
   } catch (error) {
@@ -26,8 +27,9 @@ export async function GET(request, { params }) {
 export async function PUT(request, { params }) {
   try {
     await connectDB();
+    const resolvedParams = await params;
     const body = await request.json();
-    const worker = await Worker.findByIdAndUpdate(params.id, body, { new: true, runValidators: true });
+    const worker = await Worker.findByIdAndUpdate(resolvedParams.id, body, { new: true, runValidators: true }).populate('assignedProject', 'title');
     if (!worker) return NextResponse.json({ error: 'Worker not found' }, { status: 404, headers: CORS_HEADERS });
     return NextResponse.json({ worker, message: 'Worker updated successfully' }, { headers: CORS_HEADERS });
   } catch (error) {
@@ -38,7 +40,8 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
   try {
     await connectDB();
-    const worker = await Worker.findByIdAndDelete(params.id);
+    const resolvedParams = await params;
+    const worker = await Worker.findByIdAndDelete(resolvedParams.id);
     if (!worker) return NextResponse.json({ error: 'Worker not found' }, { status: 404, headers: CORS_HEADERS });
     return NextResponse.json({ message: 'Worker deleted successfully' }, { headers: CORS_HEADERS });
   } catch (error) {

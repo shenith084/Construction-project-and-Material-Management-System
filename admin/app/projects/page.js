@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import { projectsAPI } from '@/lib/api';
-import { Plus, Edit2, Trash2, X, Save, MapPin, Calendar, DollarSign, TrendingUp } from 'lucide-react';
+import { Plus, Edit2, Trash2, X, Save, MapPin, Calendar, DollarSign, TrendingUp, FolderOpen } from 'lucide-react';
 
 const STATUSES = ['Planning', 'Active', 'On Hold', 'Completed'];
 

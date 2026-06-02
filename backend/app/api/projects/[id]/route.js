@@ -15,7 +15,8 @@ export async function OPTIONS() {
 export async function GET(request, { params }) {
   try {
     await connectDB();
-    const project = await Project.findById(params.id);
+    const resolvedParams = await params;
+    const project = await Project.findById(resolvedParams.id);
     if (!project) return NextResponse.json({ error: 'Project not found' }, { status: 404, headers: CORS_HEADERS });
     return NextResponse.json({ project }, { headers: CORS_HEADERS });
   } catch (error) {
@@ -26,8 +27,9 @@ export async function GET(request, { params }) {
 export async function PUT(request, { params }) {
   try {
     await connectDB();
+    const resolvedParams = await params;
     const body = await request.json();
-    const project = await Project.findByIdAndUpdate(params.id, body, { new: true, runValidators: true });
+    const project = await Project.findByIdAndUpdate(resolvedParams.id, body, { new: true, runValidators: true });
     if (!project) return NextResponse.json({ error: 'Project not found' }, { status: 404, headers: CORS_HEADERS });
     return NextResponse.json({ project, message: 'Project updated successfully' }, { headers: CORS_HEADERS });
   } catch (error) {
@@ -38,7 +40,8 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
   try {
     await connectDB();
-    const project = await Project.findByIdAndDelete(params.id);
+    const resolvedParams = await params;
+    const project = await Project.findByIdAndDelete(resolvedParams.id);
     if (!project) return NextResponse.json({ error: 'Project not found' }, { status: 404, headers: CORS_HEADERS });
     return NextResponse.json({ message: 'Project deleted successfully' }, { headers: CORS_HEADERS });
   } catch (error) {

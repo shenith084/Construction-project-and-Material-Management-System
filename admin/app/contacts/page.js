@@ -27,6 +27,10 @@ export default function ContactsPage() {
     try { await contactsAPI.update(id, { status: 'Read' }); load(); } catch {}
   };
 
+  const handleMarkReplied = async (id) => {
+    try { await contactsAPI.update(id, { status: 'Replied' }); setSelected(null); load(); } catch {}
+  };
+
   const handleDelete = async (id) => {
     try { await contactsAPI.delete(id); setDeleteId(null); setSelected(null); load(); } catch (err) { alert(err.message); }
   };
@@ -115,8 +119,16 @@ export default function ContactsPage() {
                 <div style={{ background: '#f8fafc', borderRadius: '8px', padding: '14px', color: '#374151', fontSize: '14px', lineHeight: '1.6' }}>{selected.message}</div>
               </div>
               <div style={{ fontSize: '12px', color: '#94a3b8' }}>Received: {new Date(selected.createdAt).toLocaleString()}</div>
-              <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', paddingTop: '8px' }}>
+              <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end', flexWrap: 'wrap', paddingTop: '8px' }}>
                 <button className="btn-secondary" onClick={() => setSelected(null)}>Close</button>
+                {selected.status !== 'Replied' && (
+                  <button
+                    onClick={() => handleMarkReplied(selected._id)}
+                    style={{ background: '#dcfce7', color: '#16a34a', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: '600', fontSize: '14px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+                  >
+                    <CheckCircle size={14} /> Mark Replied
+                  </button>
+                )}
                 <button className="btn-danger" onClick={() => { setDeleteId(selected._id); setSelected(null); }}><Trash2 size={14} /> Delete</button>
               </div>
             </div>

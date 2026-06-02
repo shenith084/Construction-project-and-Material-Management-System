@@ -16,6 +16,9 @@ export const materialsAPI = {
 export const workersAPI = {
   getAll: () => apiFetch('/api/workers'),
 };
+export const suppliersAPI = {
+  getAll: () => apiFetch('/api/suppliers'),
+};
 export const contactsAPI = {
   submit: (body) => fetch(`${API_URL}/api/contacts`, {
     method: 'POST',
@@ -23,3 +26,4 @@ export const contactsAPI = {
     body: JSON.stringify(body),
   }).then(r => r.json()),
 };
+
