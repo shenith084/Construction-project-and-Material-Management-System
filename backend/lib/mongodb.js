@@ -1,8 +1,4 @@
 import mongoose from 'mongoose';
-import dns from 'dns';
-
-// Bypass local ISP DNS blocks by forcing Google Public DNS
-dns.setServers(['8.8.8.8', '8.8.4.4']);
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
@@ -24,8 +20,6 @@ async function connectDB() {
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
-      family: 4, // Force IPv4, solves DNS issues on Windows
-      serverSelectionTimeoutMS: 60000, // Increase timeout to allow IPv6 DNS to fallback to IPv4
     };
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => mongoose);
   }
