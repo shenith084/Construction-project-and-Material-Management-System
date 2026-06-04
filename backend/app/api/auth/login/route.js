@@ -3,6 +3,14 @@ import connectDB from '@/lib/mongodb';
 import Admin from '@/models/Admin';
 import { signToken } from '@/lib/auth';
 
+/**
+ * Handles the POST request for admin login.
+ * Validates credentials, creates a JWT token upon success,
+ * and sets an HTTP-only cookie for secure session management.
+ * 
+ * @param {Request} request - The incoming HTTP request containing email and password.
+ * @returns {NextResponse} JSON response containing admin data and token, or an error message.
+ */
 export async function POST(request) {
   try {
     await connectDB();

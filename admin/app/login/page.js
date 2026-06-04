@@ -165,7 +165,7 @@ export default function LoginPage() {
         </form>
 
         <p style={{ color: '#475569', fontSize: '12px', textAlign: 'center', marginTop: '24px' }}>
-          Default: admin@construction.com / admin123456
+
         </p>
       </div>
     </div>

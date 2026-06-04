@@ -7,11 +7,21 @@ import { Plus, Edit2, Trash2, X, Save, MapPin, Calendar, DollarSign, TrendingUp,
 
 const STATUSES = ['Planning', 'Active', 'On Hold', 'Completed'];
 
+// Default state for a new project form
 const emptyForm = {
   title: '', description: '', location: '', manager: '',
   startDate: '', endDate: '', budget: '', spent: '', progress: 0, status: 'Planning',
 };
 
+/**
+ * ProjectModal Component
+ * Handles both the creation of new projects and editing of existing ones.
+ * Displays a form inside a modal and submits data to the backend.
+ * 
+ * @param {Object} props.project - Existing project data for editing, null for new projects.
+ * @param {Function} props.onClose - Callback triggered to close the modal.
+ * @param {Function} props.onSave - Callback triggered upon successful save/update.
+ */
 function ProjectModal({ project, onClose, onSave }) {
   const [form, setForm] = useState(project ? { ...project, startDate: project.startDate?.substring(0, 10), endDate: project.endDate?.substring(0, 10) } : emptyForm);
   const [loading, setLoading] = useState(false);
@@ -95,6 +105,11 @@ function ProjectModal({ project, onClose, onSave }) {
 
 const statusClass = { 'Active': 'badge-orange', 'Planning': 'badge-info', 'Completed': 'badge-success', 'On Hold': 'badge-warning' };
 
+/**
+ * ProjectsPage Component
+ * Main page for displaying and managing the list of construction projects.
+ * Includes data fetching, deleting projects, and triggering the ProjectModal.
+ */
 export default function ProjectsPage() {
   const router = useRouter();
   const [projects, setProjects] = useState([]);
@@ -102,15 +117,20 @@ export default function ProjectsPage() {
   const [modal, setModal] = useState(null); // null | 'new' | project object
   const [deleteId, setDeleteId] = useState(null);
 
+  // Fetch projects securely from the backend API
   const load = async () => {
     try {
       const data = await projectsAPI.getAll();
       setProjects(data.projects);
-    } catch { router.push('/login'); }
+    } catch { 
+      // If authentication fails, redirect to login
+      router.push('/login'); 
+    }
     finally { setLoading(false); }
   };
 
   useEffect(() => {
+    // Validate authentication token before rendering protected content
     const token = localStorage.getItem('admin_token');
     if (!token) { router.push('/login'); return; }
     load();

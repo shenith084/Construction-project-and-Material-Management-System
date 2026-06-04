@@ -2,6 +2,12 @@ import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Contact from '@/models/Contact';
 
+/**
+ * Handles GET requests to retrieve all contact messages.
+ * Messages are sorted by creation date in descending order.
+ * 
+ * @returns {NextResponse} JSON response containing the list of contacts.
+ */
 export async function GET() {
   try {
     await connectDB();
@@ -12,6 +18,14 @@ export async function GET() {
   }
 }
 
+/**
+ * Handles POST requests to submit a new contact message.
+ * Validates the input payload, ensures a valid email structure,
+ * and saves the new contact entry into the database.
+ * 
+ * @param {Request} request - The incoming HTTP request containing the contact details.
+ * @returns {NextResponse} JSON response containing the saved contact and a success message.
+ */
 export async function POST(request) {
   try {
     await connectDB();

@@ -10,6 +10,11 @@ const contactInfo = [
   { icon: Mail, title: 'Email', detail: 'info@constructpro.com' },
 ];
 
+/**
+ * ContactPage Component
+ * Displays contact information and a contact form.
+ * Handles form state, submission to the backend API, and displays success/error states.
+ */
 export default function ContactPage() {
   const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
   const [status, setStatus] = useState(null); // null | 'loading' | 'success' | 'error'
