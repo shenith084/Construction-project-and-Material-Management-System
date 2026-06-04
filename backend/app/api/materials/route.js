@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Material from '@/models/Material';
+import '@/models/Supplier'; // Must be imported so Mongoose registers the model for .populate()
 
 export async function GET(request) {
   try {

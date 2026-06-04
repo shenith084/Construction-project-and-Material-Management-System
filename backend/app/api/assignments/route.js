@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import connectDB from '@/lib/mongodb';
 import Assignment from '@/models/Assignment';
+import '@/models/Project'; // Register models for .populate()
+import '@/models/Worker';
+
 
 export async function GET() {
   try {
