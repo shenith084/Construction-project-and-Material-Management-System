@@ -34,12 +34,11 @@ MaterialSchema.virtual('availableQuantity').get(function () {
 });
 
 // Auto-update status based on stock
-MaterialSchema.pre('save', function (next) {
+MaterialSchema.pre('save', async function () {
   const available = this.stockQuantity - this.usedQuantity;
   if (available <= 0) this.status = 'Out of Stock';
   else if (available <= this.reorderLevel) this.status = 'Low Stock';
   else this.status = 'In Stock';
-  next();
 });
 
 export default mongoose.models.Material || mongoose.model('Material', MaterialSchema);

@@ -5,7 +5,7 @@ const ALLOWED_ORIGINS = [
   'http://localhost:3001', // admin panel
 ];
 
-export function middleware(request) {
+export function proxy(request) {
   const origin = request.headers.get('origin') || '';
   const isAllowed = ALLOWED_ORIGINS.includes(origin);
 
