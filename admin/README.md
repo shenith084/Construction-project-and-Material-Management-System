@@ -1,36 +1,97 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🔐 Admin Panel — Construction Management System
 
-## Getting Started
+Secure admin management panel built with **Next.js 16**.  
+Connects to the shared backend API at `localhost:3002`.
 
-First, run the development server:
+- **Port:** `http://localhost:3001`
+- **Requires:** Backend running at `http://localhost:3002`
+
+---
+
+## 🚀 Getting Started
+
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Create environment file
+
+Create `admin/.env.local`:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3002
+```
+
+### 3. Run the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Admin panel opens at **http://localhost:3001**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. Login
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Make sure the backend is running and seeded, then log in:
 
-## Learn More
+```
+Email:    admin@construction.com
+Password: admin123456
+```
 
-To learn more about Next.js, take a look at the following resources:
+> To seed: `curl -X POST http://localhost:3002/api/auth/seed-data`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📁 Structure
 
-## Deploy on Vercel
+```
+admin/
+├── app/
+│   ├── login/page.js       # JWT login with password toggle
+│   ├── dashboard/page.js   # KPI cards, charts, stock alerts
+│   ├── projects/page.js    # Full CRUD with modal forms
+│   ├── materials/page.js   # Stock management, reorder levels
+│   ├── workforce/page.js   # Worker management + project assignment
+│   ├── suppliers/page.js   # Supplier CRUD + supply history
+│   └── contacts/page.js    # View, mark read, delete messages
+├── components/
+│   ├── Sidebar.js          # Navigation sidebar + logout
+│   └── Header.js           # Page header component
+├── lib/
+│   └── api.js              # Centralised API client (fetch + auth token)
+└── .env.local              # NEXT_PUBLIC_API_URL
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🗂️ Pages
+
+| Page | URL | Features |
+|------|-----|----------|
+| Login | `/login` | JWT authentication, password visibility toggle |
+| Dashboard | `/dashboard` | KPI cards, analytics charts, low-stock alerts, quick actions |
+| Projects | `/projects` | Create / Edit / Delete — progress slider, status badges |
+| Materials | `/materials` | Add / Edit / Delete — stock levels, category, reorder alert |
+| Workforce | `/workforce` | Add / Edit / Remove workers, assign to projects |
+| Suppliers | `/suppliers` | Supplier CRUD + supply history log per supplier |
+| Messages | `/contacts` | View submissions, mark read/unread, delete |
+
+---
+
+## 🔐 Authentication
+
+- JWT token stored in `localStorage` as `admin_token`
+- Every protected page checks for the token on mount; redirects to `/login` if missing
+- Token is sent as `Authorization: Bearer <token>` header on every API request
+- Logout clears `localStorage` and calls `/api/auth/logout`
+
+---
+
+## 📝 Notes
+
+- Admin panel is purely client-side rendered (`'use client'`)
+- All data is fetched from the shared backend at `NEXT_PUBLIC_API_URL`
+- No direct database connection — all operations go through the backend API
