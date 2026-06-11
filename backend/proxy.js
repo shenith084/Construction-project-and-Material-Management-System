@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 const ALLOWED_ORIGINS = [
   'http://localhost:3000', // website
   'http://localhost:3001', // admin panel
+  ...(process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim()) : []),
 ];
 
 export function proxy(request) {
