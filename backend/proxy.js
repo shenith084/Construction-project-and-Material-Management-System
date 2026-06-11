@@ -8,7 +8,10 @@ const ALLOWED_ORIGINS = [
 
 export function proxy(request) {
   const origin = request.headers.get('origin') || '';
-  const isAllowed = ALLOWED_ORIGINS.includes(origin);
+  const isAllowed = 
+    ALLOWED_ORIGINS.includes(origin) || 
+    origin.endsWith('.vercel.app') || 
+    origin.startsWith('http://localhost:');
 
   // Handle CORS preflight (OPTIONS)
   if (request.method === 'OPTIONS') {
